@@ -1,0 +1,100 @@
+<!-- NoteBook/templates/registration/login.html -->
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div class="login-container">
+    <h2 class="text-center">Login</h2>
+    <form method="post" class="login-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-block btn-custom">Login</button>
+        {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
+    </form>
+</div>
+
+<style>
+    /* Login Container */
+    .login-container {
+        max-width: 400px;
+        margin: 80px auto;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(8px);
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    /* Fade In Animation */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Login Form Styles */
+    .login-form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #00796B;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .login-form input[type="text"]:focus,
+    .login-form input[type="password"]:focus {
+        outline: none;
+        border-color: #004D40;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-form label {
+        font-weight: bold;
+        color: #283618; /* Darker Text */
+    }
+
+    /* Button Styles */
+    .btn-custom {
+        background: linear-gradient(135deg, #e6f450, #4DB6AC);
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .btn-custom:hover {
+        background: #c7ec58;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Media Query for Smaller Screens */
+    @media (max-width: 768px) {
+        .login-container {
+            margin: 50px auto;
+            padding: 15px;
+        }
+
+        .btn-custom {
+            padding: 12px;
+        }
+    }
+</style>
+{% endblock %}

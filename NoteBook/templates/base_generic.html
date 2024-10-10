@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteNest</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+   
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #fefae0; /* Light background for contrast */
+        }
+
+        /* Navbar Styles */
+        nav {
+            background: linear-gradient(135deg, #c1df65, #4DB6AC);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s ease; /* Smooth background transition */
+        }
+
+        nav.scrolled {
+            background: rgba(0, 150, 136, 0.9); /* Slightly darker when scrolled */
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #f61010c4;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s; /* Scale effect on hover */
+        }
+
+        .navbar-brand i {
+            margin-right: 8px;
+            transition: transform 0.3s; /* Scale effect for icon */
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05); /* Scale up the brand on hover */
+        }
+
+        .navbar-brand:hover i {
+            transform: rotate(360deg); /* Rotate icon on hover */
+        }
+
+        .navbar-nav .nav-link {
+            color: white;
+            margin: 0 15px;
+            font-size: 1.1rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -5px;
+            height: 2px;
+            background: #f1f1f1; /* Subtle underline */
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #f1f1f1;
+        }
+
+        .navbar-nav .nav-link:hover::after {
+            transform: scaleX(1); /* Show underline on hover */
+        }
+
+        .nav-item .btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav-item .btn:hover {
+            color: #f1f1f1;
+        }
+
+        /* To account for the fixed navbar, apply top margin to the content container */
+        .container {
+            margin-top: 100px; /* Adjust this based on your navbar height */
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 0.5rem 1rem;
+            }
+
+            .navbar-toggler {
+                margin-left: auto; /* Pushes to the right */
+            }
+
+            .navbar-collapse {
+                text-align: center;
+            }
+
+            .navbar-nav {
+                flex-direction: column;
+            }
+
+            .navbar-nav .nav-link {
+                margin: 10px 0;
+                width: 100%;
+                padding: 10px;
+                transition: background 0.3s ease;
+            }
+
+            .navbar-nav .nav-link:hover {
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 4px;
+            }
+
+            .nav-item .btn {
+                margin-top: 10px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="d-flex justify-content-between w-100">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <i class="fas fa-sticky-note"></i> NoteNest
+            </a>
+    
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon">
+                    <i class="fas fa-bars" style="color:white;"></i>
+                </span>
+            </button>
+        </div>
+    
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'note-list' %}">Notebooks</a>
+                    </li>
+                    <li class="nav-item">
+                        <form action="{% url 'logout' %}" method="post" class="nav-link d-inline p-0 m-0">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-light">
+                                <i class="fas fa-sign-out-alt"></i> <!-- Logout icon -->
+                            </button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    
+
+    <div class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Change navbar background on scroll
+        window.onscroll = function() {
+            var navbar = document.querySelector('nav');
+            if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        };
+    </script>
+</body>
+</html>

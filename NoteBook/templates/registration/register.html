@@ -1,0 +1,98 @@
+<!-- NoteBook/templates/registration/register.html -->
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Create Account</h2>
+    <form method="post" class="bg-white p-4 rounded shadow">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" name="username" id="username" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" name="email" id="email" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="password1" class="form-label">Password</label>
+            <input type="password" name="password1" id="password1" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="password2" class="form-label">Confirm Password</label>
+            <input type="password" name="password2" id="password2" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Register</button>
+    </form>
+</div>
+
+<style>
+    body {
+        background-color: #f7f9fc; /* Light background for contrast */
+        font-family: 'Arial', sans-serif; /* Modern font */
+    }
+
+    h2 {
+        color: #333; /* Darker text for headings */
+        animation: fadeIn 1s ease-in-out; /* Fade-in animation for heading */
+    }
+
+    form {
+        animation: slideIn 0.5s ease forwards; /* Slide-in animation for form */
+        opacity: 0; /* Initial opacity for fade effect */
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(-20px); /* Slide from above */
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0); /* Slide to normal position */
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    .form-control {
+        border-radius: 0.5rem; /* Rounded corners */
+        transition: border-color 0.3s, box-shadow 0.3s; /* Transition for focus effect */
+        border: 2px solid #ddd; /* Default border */
+    }
+
+    .form-control:focus {
+        border-color: #009600; /* Change border color on focus */
+        box-shadow: 0 0 5px rgba(138, 162, 160, 0.5); /* Glow effect on focus */
+        outline: none; /* Remove default outline */
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #e6f450, #4DB6AC);
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #00796B; /* Darker color on hover */
+        border-color: #00796B; /* Match border color on hover */
+        transform: translateY(-2px); /* Slight lift effect on hover */
+    }
+
+    .btn-primary:active {
+        transform: translateY(0); /* Reset lift effect on click */
+    }
+</style>
+{% endblock %}

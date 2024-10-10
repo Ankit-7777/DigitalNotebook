@@ -1,0 +1,208 @@
+{% extends 'base_generic.html' %}
+
+{% block title %}Note: {{ note.title }}{% endblock %}
+
+{% block content %}
+
+<!-- Include Bootstrap's responsive meta tag -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+    /* Main container styling */
+    .note-detail-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 50px;
+        background: linear-gradient(135deg, #f3f4f6, #e0e0e0);
+        min-height: 100vh;
+    }
+
+    /* Note detail card styling */
+    .note-detail-card {
+        background: linear-gradient(135deg, #e6f450, #4DB6AC);
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        padding: 40px;
+        max-width: 100%;
+        width: 100%;
+        text-align: center;
+        transform: scale(1);
+        transition: all 0.4s ease-out;
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .note-detail-card:hover {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+        transform: scale(1.03);
+    }
+
+    /* Title styling */
+    .note-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 30px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 20px;
+        transition: color 0.3s;
+    }
+
+    .note-title:hover {
+        color: #333;
+    }
+
+    /* Meta information styling */
+    .note-meta {
+        font-size: 14px;
+        color: #f9f9f9;
+        margin-bottom: 30px;
+        font-style: italic;
+    }
+
+    .note-meta .note-user {
+        font-weight: bold;
+        font-size: 24px;
+        color: #d0740b;
+        text-shadow: 0 0 5px rgba(255, 235, 59, 0.8);
+        transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .note-meta .note-user:hover {
+        color: #FF9800;
+        text-shadow: 0 0 10px rgba(255, 152, 0, 0.8);
+    }
+
+    /* Content styling */
+    .note-content {
+        text-align: left;
+        font-size: 16px;
+        line-height: 1.6;
+        color: white;
+        margin-bottom: 20px;
+    }
+
+    /* Button styling */
+    .note-actions {
+        margin-top: 35px;
+    }
+
+    .btn {
+        padding: 15px 35px;
+        font-size: 16px;
+        border-radius: 50px;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        margin: 0 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        color: white;
+        border: none;
+    }
+
+    /* Edit button styling */
+    .btn-edit {
+        background: linear-gradient(135deg, #FFAB40, #FF7043);
+    }
+
+    .btn-edit:hover {
+        background: linear-gradient(135deg, #FF7043, #FFAB40);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Delete button styling */
+    .btn-delete {
+        background: linear-gradient(135deg, #EF5350, #E53935);
+    }
+
+    .btn-delete:hover {
+        background: linear-gradient(135deg, #E53935, #EF5350);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Back button styling */
+    .btn-back {
+        background: linear-gradient(135deg, #daf542, #e59f1e);
+        color: white;
+        text-decoration: none;
+    }
+
+    .btn-back:hover {
+        background: linear-gradient(135deg, #1ee5c4, #42A5F5);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Animation for card */
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Ensure back button is visible */
+    .btn-back {
+        margin-top: 20px; /* Add some margin to keep it clear of the navbar */
+    }
+
+  
+  
+</style>
+
+<div class="container note-detail-container">
+    <!-- Success/Error Messages -->
+    {% if messages %}
+        <div class="alert alert-info" id="message">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+
+    <div class="note-detail-card">
+        <h1 class="note-title">{{ note.title }}</h1>
+        <p class="note-meta">
+            {{ note.created_date|date:"F d, Y" }} by <span class="note-user">{{ note.user.username }}</span>
+        </p>
+        <div class="note-content">
+            <p>{{ note.content }}</p>
+        </div>
+        <div class="note-actions">
+            <a href="{% url 'note-update' note.id %}" class="btn btn-edit">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a href="{% url 'note-delete' note.id %}" class="btn btn-delete">
+                <i class="fas fa-trash-alt"></i> Delete
+            </a>
+            <a href="{% url 'index' %}" class="btn btn-back m-3">
+                <i class="fas fa-arrow-left"></i> Back to Notebook List
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Hide the message after 5 seconds
+    setTimeout(function() {
+        var message = document.getElementById('message');
+        if (message) {
+            message.style.opacity = '0';
+            setTimeout(function() {
+                message.style.display = 'none';
+            }, 500); // Match this to the transition duration
+        }
+    }, 5000);
+</script>
+
+{% endblock %}
